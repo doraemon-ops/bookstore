@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xlw.onlineshop.dao.MemberDao">
+
+    <select id="getMember" parameterType="Member"  resultType="Member">
+        select * from member where memberName = #{memberName} and password = #{password};
+    </select>
+
+    <select id="getMemberById"  resultType="Member">
+        select * from member where memberId = #{memberId};
+    </select>
+
+    <select id="getMemberByName"  resultType="Member">
+        select * from member where memberName = #{memberName};
+    </select>
+
+    <insert id="addMember">
+        insert into member(memberName,sex,phoneNum,address,password) values(#{memberName},#{sex},#{phoneNum},#{address},#{password})
+    </insert>
+</mapper>
+
+

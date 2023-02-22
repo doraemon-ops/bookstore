@@ -1,0 +1,161 @@
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="shortcut icon" href="#" type="image/png">
+
+    <title>商城</title>
+
+    <link href="../../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet">
+    <!-- 响应式样式 -->
+    <link href="../../static/css/style-responsive.css" th:href="@{/css/style-responsive.css}" rel="stylesheet">
+
+    <!-- js IE8支持HTML5元素和媒体查询 IE 兼容脚本 -->
+    <!--[if lt IE 9]>
+    <script src="../../static/js/html5shiv.js" th:src="@{/js/html5shiv.js}"></script>
+    <script src="../../static/js/respond.min.js" th:src="@{/js/respond.min.js}"></script>
+    <![endif]-->
+</head>
+
+<style>
+    #window-header {
+        width: 100%;
+        height: 15%;
+    }
+
+    #window-left {
+        width: 80%;
+        height: 100%;
+        padding: 5px;
+        float: left;
+    }
+
+    #window-right {
+        width: 20%;
+        height: 100%;
+        padding: 5px;
+        float: right;
+    }
+
+    #window-In-window-left {
+        width: 90%;
+        height: 10%;
+        padding: 5px;
+        float: top;
+    }
+
+</style>
+
+
+<body class="login-body">
+
+<div id="window-header">
+    <div align="center" class="page-header">
+        <h1>Welcome to online bookstore</h1>
+    </div>
+</div>
+
+<div id="window-left">
+    <div id="window-In-window-left">
+        <div class="col-lg-6">
+            <form th:action="@{/goods/search}" method="post">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="keyWords" placeholder="请输入商品关键字...">
+                    <span class="input-group-btn">
+                    <input type="submit" class="btn btn-default" value="搜索"></input>
+                </span>
+                </div><!-- /input-group -->
+            </form>
+        </div><!-- /.col-lg-6 -->
+
+        <div>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a type="button" th:href="@{/toShoppingCenter}" class="btn btn-default">全部</a>
+            <div class="btn-group" th:fragment="categoryList" role="group" aria-label="..." th:each="category:${allCategory}">
+                <a id="categoryBtn" th:href="@{/category/getGoods/{categoryId}(categoryId=${category.categoryId})}" type="button" class="btn btn-default active" th:text="${category.categoryName}">
+                    Left
+                </a>
+                <textarea class="hidden" th:text="${category.categoryId}"></textarea>
+            </div>
+            <a type="button" th:href="@{/goods/getTop6}" class="btn btn-default">销量TOP6</a>
+        </div>
+
+    </div>
+
+    <div id="goodList-container" class="container">
+        <div class="row">
+            <div class="col-xs-6 col-md-3" th:each="goods:${allGoods}">
+                <img height="300px" width="220px" th:src="${goods.goodsPicture}" alt="...">
+                <div class="caption">
+                    <h3 th:text="${goods.goodsName}">商品名称</h3>
+                    <h5 th:text="${goods.price} + '元'">商品价格</h5>
+                    <h5 th:text=" '销量：' + ${goods.goodsSellCount}">销量</h5>
+                    <p th:text=" '描述：' + ${goods.goodsDes}">商品描述</p>
+                    <p><a th:href="@{/goodsCar/goodsAdd/{goodsId}(goodsId=${goods.goodsId})}" class="btn btn-primary"
+                          role="button">加入购物车</a></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div id="window-right">
+
+    <div>
+        <h3>
+            <span>
+                Hello , <span th:text="${session.userSession.memberName}"></span> &nbsp;&nbsp;&nbsp;&nbsp;
+                <a class="btn btn-default"  th:href="@{/logout}">
+                退出登录
+                </a>
+                <a class="btn btn-default" th:href="@{/order/getAllOrders}">
+                查看所有订单
+                </a>
+            </span>
+        </h3>
+    </div>
+    <div><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true">&nbsp;我的购物车</span></div>
+    <br>
+    <!--    购物车-->
+    <div >
+        <ul class="list-group" id="addList">
+            <li class="list-group-item" th:each="goods:${goodsCarGoods}">
+                <span th:text="${goods.goodsName}">商品名称</span>
+                <br>
+                <span class="badge">价格:共<span th:text="${goods.price}*${goods.count}"></span>元</span>
+                <span class="badge">数量：<span th:text="${goods.count}"> </span>个</span>
+                <a th:href="@{/goodsCar/goodsAdd/{goodsId}(goodsId=${goods.goodsId})}" class="glyphicon glyphicon-plus" role="button"></a>
+                <a th:href="@{/goodsCar/goodsSub/{goodsId}(goodsId=${goods.goodsId})}" class="glyphicon glyphicon-minus" role="button"></a>
+
+            </li>
+        </ul>
+    </div>
+
+    <div>
+        <a th:href="@{/order/settlement}" class="btn btn-default" role="button">结算</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a th:href="@{/goodsCar/clear}" class="btn btn-default" role="button">清空购物车</a>
+    </div>
+
+</div>
+
+
+
+
+<script src="../../static/js/jquery-1.10.2.min.js" th:src="@{/js/jquery-1.10.2.min.js}"></script>
+<script src="../../static/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+<script src="../../static/js/modernizr.min.js" th:src="@{/js/modernizr.min.js}"></script>
+<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+      integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+        integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

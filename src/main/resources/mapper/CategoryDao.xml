@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xlw.onlineshop.dao.CategoryDao">
+    <insert id="addCategory">
+        insert into category(categoryName) values (#{categoryName})
+    </insert>
+
+    <update id="updateCategory">
+        update category set categoryName = #{categoryName} where categoryId = #{categoryId}
+    </update>
+
+    <delete id="deleteById">
+        delete from category where categoryId = #{categoryID}
+    </delete>
+
+
+    <select id="getAllCategory" resultType="Category">
+        select * from category
+    </select>
+    <select id="getCategoryById" resultType="com.xlw.onlineshop.entity.Category">
+        select * from category where categoryId = #{categoryId}
+    </select>
+    <select id="getCategoryByName" resultType="com.xlw.onlineshop.entity.Category">
+        select * from category where categoryName = #{categoryName}
+    </select>
+</mapper>
+
+

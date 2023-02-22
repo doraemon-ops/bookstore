@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xlw.onlineshop.dao.OrderDao">
+    <insert id="addOrder">
+        insert into tbl_order(orderDate,memberId,orderNumber) values(#{orderDate},#{memberId},#{orderNumber})
+    </insert>
+
+    <insert id="addOrderAndGoods">
+        insert into order_and_goods values (#{orderId},#{goodsId},#{count})
+    </insert>
+
+    <delete id="deleteMemberOrdersGoods">
+        delete from order_and_goods where orderId in (select orderId from tbl_order where memberId = #{memberId})
+    </delete>
+
+    <delete id="deleteMemberAllOrders">
+        delete from tbl_order where memberId = #{memberId}
+    </delete>
+
+    <select id="getOrderIdByOrderNumber" resultType="java.lang.Integer">
+        select orderId from tbl_order where orderNumber = #{orderNumber}
+    </select>
+
+    <select id="getOrderIdByMemberId" resultType="java.lang.Integer">
+        select orderId from tbl_order where memberId = #{memberId}
+    </select>
+
+    <select id="getOrderById" resultType="com.xlw.onlineshop.entity.Order">
+        select * from tbl_order where orderId = #{orderId}
+    </select>
+    <select id="getGoodsCountById" resultType="java.lang.Integer">
+        select count(*) from order_and_goods where goodsId = #{goodsId}
+    </select>
+</mapper>
+
+

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xlw.onlineshop.dao.GoodsDao">
+    <insert id="addGoods">
+        insert into goods(goodsName,categoryId,price,goodsDes,goodsSellCount,goodsPicture) values (#{goodsName},#{categoryId},#{price},#{goodsDes},#{goodsSellCount},#{goodsPicture})
+    </insert>
+
+    <update id="updateGoodsSellCountById">
+        update goods set goodsSellCount = #{count} where goodsId = #{goodsId}
+    </update>
+    <update id="updateGoods">
+        update goods set goodsName = #{goodsName},price = #{price},goodsPicture = #{goodsPicture},
+        goodsDes = #{goodsDes},goodsSellCount = #{goodsSellCount} ,categoryId = #{categoryId} where goodsId = #{goodsId}
+    </update>
+    <delete id="deleteById">
+        delete from goods where goodsId = #{goodsId}
+    </delete>
+
+
+    <select id="getAllGoods" resultType="Goods">
+        select * from goods
+    </select>
+
+    <select id="getGoodsByCategoryId" resultType="Goods">
+        select * from goods where categoryId = #{categoryId}
+    </select>
+
+    <select id="getGoodsTop6" resultType="Goods">
+        select * from goods order by goodsSellCount desc limit 6
+    </select>
+
+    <select id="getGoodsByKeyWords" resultType="Goods">
+        <bind name="pattern" value="'%' + keyWords + '%'" />
+        select * from goods where goodsName like #{pattern} or goodsDes like #{pattern}
+    </select>
+
+    <select id="getGoodsById" resultType="com.xlw.onlineshop.entity.Goods">
+        select * from goods where goodsId =  #{goodsId}
+    </select>
+
+<!--    <select id="getGoodsByOrderId" resultType="com.xlw.onlineshop.entity.Goods">-->
+<!--        select * from goods where goodsId in (select goodsId from order_and_goods where orderId = #{orderId})-->
+<!--    </select>-->
+
+    <select id="getGoodsByOrderId" resultType="com.xlw.onlineshop.entity.Goods">
+        select
+            goods.*,order_and_goods.count
+         from order_and_goods left join goods
+         on order_and_goods.goodsId = goods.goodsId
+         left join tbl_order
+         on order_and_goods.orderId = tbl_order.orderId
+         where
+         order_and_goods.orderId = #{orderId}
+    </select>
+
+    <select id="getGoodsCountByCategoryId" resultType="java.lang.Integer">
+        select count(*) from goods where categoryId = #{categoryId}
+    </select>
+</mapper>
+
+

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xlw.onlineshop.dao.GoodsCarDao">
+
+    <select id="getGoodsCarByMemberId" resultType="Goods">
+        select
+         goods.*,goods_car_member.count as count
+        from goods_car_member inner join goods
+        on goods_car_member.goodsId = goods.goodsId
+        where goods_car_member.memberId = #{memberId}
+    </select>
+
+    <insert id="insertGoods">
+        insert into goods_car_member(memberId,goodsId,count) values (#{memberId},#{goodsId},#{count})
+    </insert>
+
+
+    <select id="getGoodsCarByMemberIdAndGoodsId" resultType="GoodsCar">
+        select * from goods_car_member where memberId=#{memberId} and goodsId=#{goodsId}
+    </select>
+    <select id="getGoodsCountById" resultType="java.lang.Integer">
+        select count(*) from goods_car_member where goodsId = #{goodsId}
+    </select>
+
+    <update id="updateGoods" >
+        update goods_car_member set count = #{count} where memberId=#{memberId} and goodsId=#{goodsId}
+    </update>
+
+    <delete id="deleteGoodsCar">
+        delete from goods_car_member where memberId=#{memberId} and goodsId=#{goodsId}
+    </delete>
+
+    <delete id="deleteAllByMemberId">
+        delete from goods_car_member where memberId=#{memberId}
+    </delete>
+
+
+
+</mapper>
+
+
